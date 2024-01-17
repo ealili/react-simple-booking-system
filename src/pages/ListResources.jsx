@@ -37,7 +37,7 @@ function ListResources() {
                     <th>Name</th>
                     <th></th>
                 </tr>
-                {
+                { resources.length > 0 &&
                     resources.map(resource => (
                         <tr key={resource.id}>
                             <td>

@@ -31,7 +31,13 @@ export default function CenteredModal(props) {
     const onSubmit = async (e) => {
         e.preventDefault()
 
-        // TODO: Date to should be larger then date from
+        if (dateTo <= dateFrom) {
+            setMessage({
+                text: 'Date To should be larger than Date From',
+                type: 'error-message'
+            });
+            return;
+        }
 
         setIsDisabled(true);
 
