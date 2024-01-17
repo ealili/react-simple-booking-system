@@ -10,6 +10,8 @@ COPY package.json yarn.lock ./
 # Install project dependencies
 RUN yarn install
 
+ENV VITE_API_BASE_URL='https://dotnet-simple-booking-system.azurewebsites.net'
+
 # Copy all files from the current directory to the container working directory
 COPY . .
 
@@ -18,8 +20,6 @@ RUN yarn build
 
 # Use a lightweight Nginx image as the final image
 FROM nginx:alpine
-
-ENV VITE_API_BASE_URL='https://dotnet-simple-booking-system.azurewebsites.net'
 
 # Copy the built application from the previous stage to the Nginx web root directory
 COPY --from=builder /app/dist /usr/share/nginx/html
