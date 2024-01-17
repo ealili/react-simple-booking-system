@@ -13,6 +13,20 @@ function App() {
             </div>
             <br/>
             <Outlet/>
+
+            <br/>
+            <div>
+                <h3>Github</h3>
+                <div className={'github-links-container'}>
+                    <div>Frontend: <a href="https://github.com/ealili/react-simple-booking-system"
+                           target={'_blank'}>https://github.com/ealili/react-simple-booking-system</a>
+                    </div>
+                    <div>Backend: <a href="https://github.com/ealili/dotnet-simple-booking-system"
+                           target={'_blank'}>https://github.com/ealili/dotnet-simple-booking-system</a>
+                    </div>
+                </div>
+
+            </div>
         </div>
     );
 }

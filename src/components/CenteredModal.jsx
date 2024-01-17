@@ -42,15 +42,12 @@ export default function CenteredModal(props) {
             resourceId: props.resource.id
         }
 
-        console.log(payload)
-
         try {
             const response = await createBooking(payload)
 
             setMessage({text: response.data.message, type: 'success-message'});
         } catch (error) {
             const {response} = error;
-            console.log(response.data.message)
             setMessage({text: response.data.message, type: 'error-message'});
         } finally {
             setTimeout(() => {

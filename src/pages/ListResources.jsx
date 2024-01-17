@@ -14,7 +14,6 @@ function ListResources() {
         try {
             const response = await getResources()
             setResources(response.data.data)
-            console.log(response)
         } catch (error) {
             console.log(error)
         }
