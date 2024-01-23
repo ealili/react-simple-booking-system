@@ -17,11 +17,13 @@ function formatToCustomString(date) {
 
 
 export default function CenteredModal(props) {
-    const [dateFrom, onChangeDateFrom] = useState(new Date(Date.now()));
+    const [dateFrom, onChangeDateFrom] = useState();
     const [dateTo, onChangeDateTo] = useState();
     const [selectedQuantity, setSelectedQuantity] = useState(1)
     const [message, setMessage] = useState({})
     const [disabled, setIsDisabled] = useState(false)
+    const today = new Date()
+    today.setHours(today.getHours() - 1);
 
 
     useEffect(() => {
@@ -33,10 +35,16 @@ export default function CenteredModal(props) {
 
         if (dateTo <= dateFrom) {
             setMessage({
-                text: 'Date To should be larger than Date From',
-                type: 'error-message'
+                text: 'Date To should be larger than Date From', type: 'error-message'
             });
             return;
+        }
+
+        if (dateFrom <= today) {
+            setMessage({
+                text: 'Date From and Time from should be greater than today\'s date and time', type: 'error-message'
+            });
+            return
         }
 
         setIsDisabled(true);
@@ -54,7 +62,11 @@ export default function CenteredModal(props) {
             setMessage({text: response.data.message, type: 'success-message'});
         } catch (error) {
             const {response} = error;
-            setMessage({text: response.data.message, type: 'error-message'});
+            if (response.data.errors) {
+                setMessage({text: Object.values(response.data.errors)[0][0], type: 'error-message'});
+            } else {
+                setMessage({text: response.data.detail, type: 'error-message'});
+            }
         } finally {
             setTimeout(() => {
                 setIsDisabled(false);
@@ -83,8 +95,10 @@ export default function CenteredModal(props) {
                 <div>
                     <span>Date From</span>
                     <span style={{float: 'right'}}>
-            <DateTimePicker minDate={new Date(Date.now().toFixed())} onChange={onChangeDateFrom}
-                            value={dateFrom}/>
+            <DateTimePicker minDate={new Date(Date.now())} onChange={onChangeDateFrom}
+                            onContextMenu={(e) => e.preventDefault()}
+                            value={dateFrom} required onClick={(e) => e.preventDefault()}
+            />
           </span>
                 </div>
                 <br/>
@@ -92,7 +106,9 @@ export default function CenteredModal(props) {
                     <span>Date To</span>
                     <span style={{float: 'right'}}>
             <DateTimePicker minDate={new Date(Date.now())} onChange={onChangeDateTo}
-                            value={dateTo} required/>
+                            onContextMenu={(e) => e.preventDefault()}
+                            value={dateTo} required onClick={(e) => e.preventDefault()}
+            />
           </span>
                 </div>
                 <div>
@@ -108,11 +124,9 @@ export default function CenteredModal(props) {
           </span>
                 </div>
                 <br/>
-                {message && (
-                    <div className={`modal-message ${message.type}`}>
+                {message && (<div className={`modal-message ${message.type}`}>
                         {message.text}
-                    </div>
-                )}
+                    </div>)}
             </Modal.Body>
             <Modal.Footer>
                 <Button className={'btn-danger'} onClick={props.onHide}>Close</Button>
