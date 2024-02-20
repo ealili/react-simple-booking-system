@@ -1,1 +1,1 @@
-# [Live Demo](https://react-simple-booking-system.azurewebsites.net/resources)
+
